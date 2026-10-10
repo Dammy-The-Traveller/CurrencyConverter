@@ -1,0 +1,25 @@
+# Maven build output
+
+target/
+
+# Temporary dependency classpath
+
+classpath.txt
+
+# Java compiled files
+
+*.class
+
+# IDE files
+
+.idea/
+.vscode/
+
+# Operating system files
+
+.DS_Store
+Thumbs.db
+
+# Logs
+
+*.log
