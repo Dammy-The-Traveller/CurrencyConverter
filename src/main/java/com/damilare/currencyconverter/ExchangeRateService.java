@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ExchangeRateService {
 
     // Defines a constant storing the base URL endpoint of the exchange rate API
-    private static final String API_URL = "https://api.frankfurter.dev/v2/rate";
+    private static final String API_URL = "https://api.frankfurter.dev/v2/rate/";
     // Defines a constant setting the cache duration limit to 24 hours
     private static final Duration CACHE_DURATION = Duration.ofHours(24);
 
@@ -58,13 +58,13 @@ public class ExchangeRateService {
     public BigDecimal getRate(Currency from, Currency to) {
 
         // Checks if the source currency and target currency are the same
-        if (from == to) {
+        if (from.equals(to)) {
             // Returns 1 immediately since converting a currency to itself requires no calculation
             return BigDecimal.ONE;
         }
 
         // Constructs a unique lookup key for the cache combining source and target currency names
-        String cacheKey = from.name() + "_" + to.name();
+        String cacheKey = from.getCode() + "_" + to.getCode();
 
         // Attempts to retrieve a cached exchange rate entry using the lookup key
         CachedRate cachedRate = rateCache.get(cacheKey);
@@ -76,10 +76,7 @@ public class ExchangeRateService {
         }
 
         // Constructs the dynamic URL string using the base URL and lowercased currency codes
-        String url = API_URL + "/"
-                + from.name().toLowerCase()
-                + "/"
-                + to.name().toLowerCase();
+       String url = API_URL + from.getCode() + "/" + to.getCode();
 
         // Creates an HTTP GET request targeting the constructed URL
         HttpRequest request = HttpRequest.newBuilder()

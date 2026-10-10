@@ -2,17 +2,39 @@ package com.damilare.currencyconverter;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 
 public class Main {
 
-    public static void main(String[] args) {
+    
+public static void main(String[] args) {
 
-        CurrencyConverter converter = new CurrencyConverter();
-        ExchangeRateService exchangeRateService = new ExchangeRateService();
-        InputHandler inputHandler = new InputHandler();
-        ConversionHistory history = new ConversionHistory();
+    CurrencyConverter converter = new CurrencyConverter();
+    ExchangeRateService exchangeRateService = new ExchangeRateService();
+    CurrencyService currencyService = new CurrencyService();
+    ConversionHistory history = new ConversionHistory();
 
-        boolean running = true;
+    List<Currency> currencies;
+
+    try {
+        currencies = currencyService.getCurrencies();
+
+        System.out.println(
+                "Loaded " + currencies.size() + " supported currencies."
+        );
+
+    } catch (RuntimeException e) {
+        currencies = Currency.fallbackCurrencies();
+
+        System.out.println(
+                "Warning: Could not load currencies from the API. "
+                        + "Using the fallback list."
+        );
+        System.out.println("Reason: " + e.getMessage());
+    }
+
+    InputHandler inputHandler = new InputHandler(currencies);
+    boolean running = true;
 
         while (running) {
 
@@ -32,11 +54,11 @@ public class Main {
                 case 1 -> {
 
                   Currency from = inputHandler.getCurrency(
-        "Select source currency:"
+        "Select source currency number:"
 );
 
 Currency to = inputHandler.getCurrency(
-        "Select target currency:"
+        "Select target currency number:"
 );
 
                     BigDecimal amount = inputHandler.getAmount();
