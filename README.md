@@ -178,7 +178,6 @@ Manual verification has also confirmed that the packaged application launches, l
 * [x] Build a desktop GUI using Java Swing
 * [x] Add automated unit tests
 * [x] Package the application as an executable JAR
-* [ ] Add application screenshots to the README
 * [ ] Create a Windows installer or self-contained application package
 * [ ] Perform further usability and cross-environment testing
 
