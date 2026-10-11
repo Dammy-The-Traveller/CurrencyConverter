@@ -48,10 +48,10 @@ To run the packaged JAR, you need a compatible Java runtime unless you use a fut
 
 ### 1. Clone the repository
 
-Replace `YOUR_GITHUB_USERNAME` with your GitHub username.
+
 
 ```bash
-git clone https://github.com/YOUR_GITHUB_USERNAME/CurrencyConverter.git
+git clone https://github.com/Dammy-The-Traveller/CurrencyConverter.git
 cd CurrencyConverter
 ```
 
