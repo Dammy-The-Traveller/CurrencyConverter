@@ -2,29 +2,93 @@
 
 A Java desktop application for converting amounts between currencies using reference exchange rates from the [Frankfurter API](https://frankfurter.dev/).
 
-Built with **Java, Java Swing, and Maven**, this project features a graphical user interface, dynamically loaded currencies, accurate decimal calculations, exchange-rate caching, and persistent conversion history.
+Built with **Java, Java Swing, and Maven**, this project features a graphical user interface, dynamically loaded currencies, precise decimal calculations, exchange-rate caching, and persistent conversion history.
+
+**[Download Currency Converter for Windows — v1.0.0](https://github.com/Dammy-The-Traveller/CurrencyConverter/releases/tag/v1.0.0)**
 
 ![Currency Converter Application](image.png)
 
 ## Features
 
-- **Desktop GUI:** Clean graphical interface built with Java Swing.
-- **Exchange rates:** Retrieves reference exchange rates from the Frankfurter API.
-- **Dynamic currency discovery:** Loads supported currencies from the API instead of relying solely on a hard-coded list.
+- **Desktop GUI:** A graphical interface built with Java Swing.
+- **Reference exchange rates:** Retrieves exchange rates from the Frankfurter API.
+- **Dynamic currency discovery:** Loads supported currencies from the API.
 - **Accurate calculations:** Uses `BigDecimal` for monetary calculations.
-- **Currency selection:** Select source and target currencies using dropdown menus.
+- **Currency selection:** Select source and target currencies from dropdown menus.
 - **Currency swapping:** Quickly reverse the selected currencies.
 - **Input validation:** Handles invalid amounts and unsupported currency selections.
 - **Exchange-rate caching:** Caches successful exchange rates in memory for up to 24 hours.
 - **Conversion history:** Displays previous conversions, including timestamps.
-- **Persistent storage:** Saves conversion history to a local JSON file and restores it between sessions.
+- **Persistent history:** Saves conversion records to a local JSON file.
 - **History management:** Allows users to clear conversion history.
-- **Responsive interface:** Uses `SwingWorker` to perform network operations without blocking the graphical interface.
-- **Error handling:** Handles network failures, API errors, and request timeouts.
-- **Offline fallback:** Can use available fallback or cached data when live data is unavailable, subject to the application's current implementation.
+- **Responsive interface:** Uses `SwingWorker` to perform network requests without blocking the GUI.
+- **Error handling:** Handles API errors, network failures, and request timeouts.
+- **Offline fallback:** Can use available fallback or cached data when live data is unavailable, depending on the operation.
 - **Automated testing:** Includes unit tests for conversion logic and history management.
 - **Executable JAR:** Packages the application and its dependencies using Maven Shade Plugin.
-- **Windows application package:** Includes a self-contained Windows application and a Windows installer built with `jpackage`.
+- **Windows distribution:** Includes a self-contained Windows application and an installer.
+
+## Download and Installation
+
+### Windows
+
+The latest release is **v1.0.0**.
+
+**[Go to Currency Converter v1.0.0 on GitHub Releases](https://github.com/Dammy-The-Traveller/CurrencyConverter/releases/tag/v1.0.0)**
+
+1. Open the release page.
+2. Download `Currency Converter-1.0.0.exe` from the Assets section.
+3. Run the installer if Windows allows it.
+4. Follow the installation prompts and launch Currency Converter.
+
+The Windows package includes a Java runtime, so a separate Java installation should not be required.
+
+**Windows security notice:** The installer is currently unsigned. Windows Smart App Control may block it because the publisher cannot be verified. This warning does not, by itself, establish whether an application is malicious. Do not disable Windows security protections simply to install this application.
+
+### Build from source
+
+#### Requirements
+
+- JDK 21 or a compatible Java development environment
+- Apache Maven
+- Internet access for retrieving fresh currency information and exchange rates
+
+#### 1. Clone the repository
+
+```bash
+git clone https://github.com/Dammy-The-Traveller/CurrencyConverter.git
+cd CurrencyConverter
+```
+
+#### 2. Build the application
+
+```bash
+mvn clean package
+```
+
+Maven compiles the source code, runs the automated tests, and creates the executable JAR.
+
+The packaged JAR is generated at:
+
+```text
+target/CurrencyConverter-1.0-SNAPSHOT.jar
+```
+
+#### 3. Run the application
+
+```bash
+java -jar target/CurrencyConverter-1.0-SNAPSHOT.jar
+```
+
+The graphical interface should open.
+
+Alternatively, open the project in an IDE such as Visual Studio Code and run `Main.java` with the Maven dependencies available.
+
+#### 4. Run the tests
+
+```bash
+mvn clean test
+```
 
 ## Technologies
 
@@ -37,89 +101,14 @@ Built with **Java, Java Swing, and Maven**, this project features a graphical us
 - JUnit 5
 - `BigDecimal`
 - JSON-based persistence
-- Git and GitHub
 - `jpackage` and WiX Toolset for Windows packaging
-
-## Requirements
-
-### To build from source
-
-- JDK 21 or a compatible Java development environment
-- Apache Maven
-- Internet access for retrieving fresh exchange-rate and currency data
-
-### To run the packaged application
-
-- **Windows installer:** Use the generated Windows installer; the application includes its own Java runtime.
-- **Executable JAR:** Requires a compatible Java runtime.
-
-## Getting Started
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/Dammy-The-Traveller/CurrencyConverter.git
-cd CurrencyConverter
-```
-
-### 2. Build the application
-
-Run the following command from the project root:
-
-```bash
-mvn clean package
-```
-
-Maven compiles the application, runs the automated tests, and packages the application with its dependencies.
-
-The executable JAR is generated at:
-
-```text
-target/CurrencyConverter-1.0-SNAPSHOT.jar
-```
-
-### 3. Run the application
-
-Launch the JAR using:
-
-```bash
-java -jar target/CurrencyConverter-1.0-SNAPSHOT.jar
-```
-
-The Currency Converter graphical interface should open.
-
-Alternatively, open the project in an IDE such as Visual Studio Code and run `Main.java` with the required Maven dependencies available.
-
-### 4. Run the tests
-
-Execute the automated test suite with:
-
-```bash
-mvn clean test
-```
-
-The tests cover currency-conversion calculations and conversion-history functionality.
-
-## Windows Application and Installer
-
-The project has been packaged into a self-contained Windows application and a Windows installer using Java's `jpackage` tool.
-
-The generated artifacts are:
-
-- **Windows application:** `release/Currency Converter/Currency Converter.exe`
-- **Windows installer:** `release/Currency Converter-1.0.0.exe`
-
-The self-contained application includes a runtime, allowing it to run without requiring the user to install Java separately.
-
-The installer can be used to install the application on a Windows computer. 
-
-
+- Git and GitHub
 
 ## Supported Currencies
 
-The application retrieves its supported currency list dynamically from the Frankfurter API. The available currencies depend on the API response and the currencies supported by the service.
+The application retrieves its supported currency list dynamically from the Frankfurter API. The number of available currencies depends on the API response and the currencies supported by the service.
 
-The application has successfully loaded 165 supported currencies during testing.
+The application successfully loaded 165 supported currencies during testing.
 
 Currency availability may change, and not every currency is necessarily available for every exchange-rate request.
 
@@ -127,31 +116,27 @@ Currency availability may change, and not every currency is necessarily availabl
 
 Exchange rates and currency information are retrieved from the [Frankfurter API](https://frankfurter.dev/).
 
-Successful exchange rates are cached in memory for up to 24 hours. The in-memory cache is cleared when the application restarts.
+Successful exchange rates are cached in memory for up to 24 hours. This in-memory cache is cleared when the application restarts.
 
 **Important:** These are reference exchange rates, not guaranteed bank, card, remittance, or cash-exchange transaction rates. Financial institutions and payment providers may apply different rates, fees, and spreads.
 
-The application uses available currency data, cached rates, or fallback data where supported when live data cannot be retrieved. Offline conversions may therefore use rates that are outdated or are not current market rates.
+When live data cannot be retrieved, the application may use available fallback currency data or cached rates where supported. Offline conversions may therefore use outdated rates and should not be treated as current market quotes.
 
 ## Conversion History and Data Persistence
 
-The application saves conversion history to a JSON file.
+Conversion history is saved locally in a JSON file.
 
-By default, the history file is stored at:
+On Windows, the default history location is:
 
 ```text
 %APPDATA%\CurrencyConverter\conversion-history.json
 ```
 
-On Windows, `%APPDATA%` typically points to the current user's roaming application-data directory.
+The application stores conversion details such as the amount, source and target currencies, exchange rate, converted amount, and timestamp.
 
-The history records conversion details such as the amount, source and target currencies, exchange rate, converted amount, and timestamp.
+History is loaded when the application starts, allowing previous conversions to remain available between sessions.
 
-Saved history is loaded when the application starts, allowing previous conversions to remain available between sessions.
-
-The application creates the required directory when saving history.
-
-**Privacy note:** Conversion history is stored locally in a JSON file. It is not encrypted and should not be treated as secure financial record storage.
+**Privacy note:** The history file is stored locally and is not encrypted. It should not be treated as secure financial record storage.
 
 ## Project Structure
 
@@ -184,11 +169,11 @@ CurrencyConverter/
 │                   └── currencyconverter/
 │                       ├── CurrencyConverterTest.java
 │                       └── ConversionHistoryTest.java
-├── target/                       # Generated by Maven
-└── release/                      # Generated Windows packages
+├── target/      # Generated Maven build files
+└── release/     # Generated Windows packages
 ```
 
-
+The `target/` and `release/` directories contain generated build artifacts.
 
 ## Testing Status
 
@@ -199,26 +184,38 @@ The project has successfully passed its current automated test suite:
 - **0 errors**
 - **0 skipped**
 
-Manual testing has also confirmed that the packaged application launches, performs conversions, and can save conversion history to the expected application-data location.
+Manual testing has confirmed that the packaged application launches, performs conversions, and can save conversion history to the expected application-data location.
 
-## Development Roadmap
+## Release Information
+
+| Item | Details |
+|---|---|
+| Current release | v1.0.0 |
+| Release type | Initial stable release |
+| Platform package | Windows |
+| Installer | `Currency Converter-1.0.0.exe` |
+| Source code | Available in this repository |
+
+**[View the latest release and download the installer](https://github.com/Dammy-The-Traveller/CurrencyConverter/releases/latest)**
+
+## Roadmap
 
 - [x] Implement currency-conversion logic
-- [x] Integrate the Frankfurter API
+- [x] Integrate reference exchange rates
 - [x] Use `BigDecimal` for calculations
 - [x] Add input validation and error handling
 - [x] Add exchange-rate caching
 - [x] Add conversion history and timestamps
 - [x] Persist history using JSON
 - [x] Load supported currencies dynamically
-- [x] Build a desktop GUI using Java Swing
+- [x] Build a Java Swing desktop GUI
 - [x] Add automated unit tests
 - [x] Package the application as an executable JAR
 - [x] Build a self-contained Windows application
-- [x] Generate a Windows installer
+- [x] Generate and publish a Windows installer
 - [ ] Improve offline-rate transparency in the interface
 - [ ] Perform further usability and cross-environment testing
-- [ ] Publish a versioned GitHub Release
+- [ ] Digitally sign the Windows installer
 
 ## Contributing
 
@@ -228,6 +225,6 @@ This is a learning and portfolio project. Suggestions, bug reports, and construc
 
 **Damilare David Adebesin**
 
-Portfolio: [damilare-david-adebesin.onrender.com](https://damilare-david-adebesin.onrender.com/)
-
-GitHub: [Dammy-The-Traveller](https://github.com/Dammy-The-Traveller)
+- **Portfolio:** [damilare-david-adebesin.onrender.com](https://damilare-david-adebesin.onrender.com/)
+- **GitHub:** [Dammy-The-Traveller](https://github.com/Dammy-The-Traveller)
+- **Project repository:** [CurrencyConverter](https://github.com/Dammy-The-Traveller/CurrencyConverter)
