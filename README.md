@@ -151,7 +151,7 @@ CurrencyConverter/
     └── CurrencyConverter-1.0-SNAPSHOT.jar
 ```
 
-The `target/` directory is generated during the Maven build and should generally not be committed to Git.
+The `target/` directory is generated during the Maven build.
 
 ## Testing Status
 
