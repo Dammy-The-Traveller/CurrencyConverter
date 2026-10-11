@@ -4,6 +4,8 @@ A Java desktop application for converting amounts between currencies using refer
 
 The project emphasizes clean code, input validation, automated testing, persistent data, and practical Java application development.
 
+![alt text](image.png)
+
 ## Features
 
 * **Desktop GUI:** A graphical interface built with Java Swing.
