@@ -188,7 +188,7 @@ CurrencyConverter/
 └── release/                      # Generated Windows packages
 ```
 
-The `target/` and `release/` directories contain generated build artifacts and do not need to be committed to Git unless you intentionally choose to distribute them through the repository.
+
 
 ## Testing Status
 
