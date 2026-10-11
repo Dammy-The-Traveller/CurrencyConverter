@@ -213,9 +213,7 @@ Manual testing has confirmed that the packaged application launches, performs co
 - [x] Package the application as an executable JAR
 - [x] Build a self-contained Windows application
 - [x] Generate and publish a Windows installer
-- [ ] Improve offline-rate transparency in the interface
-- [ ] Perform further usability and cross-environment testing
-- [ ] Digitally sign the Windows installer
+
 
 ## Contributing
 
