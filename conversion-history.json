@@ -20,4 +20,15 @@
   "exchangeRate" : 11.7303,
   "result" : 1278.6027,
   "timestamp" : "2026-10-11T00:56:09.638052700"
+}, {
+  "amount" : 100,
+  "fromCode" : "USD",
+  "fromName" : "United States Dollar",
+  "fromSymbol" : "$",
+  "toCode" : "GHS",
+  "toName" : "Ghanaian Cedi",
+  "toSymbol" : "₵",
+  "exchangeRate" : 11.7263,
+  "result" : 1172.6300,
+  "timestamp" : "2026-10-11T12:59:16.445851700"
 } ]
