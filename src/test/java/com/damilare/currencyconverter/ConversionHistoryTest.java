@@ -1,102 +1,133 @@
+
 package com.damilare.currencyconverter;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 class ConversionHistoryTest {
 
+    @TempDir
+    Path tempDir;
+
+    private ConversionHistory history;
+
+    @BeforeEach
+    void setUp() {
+        history = new ConversionHistory(
+                tempDir.resolve("conversion-history.json")
+        );
+    }
+
     @Test
     void startsEmpty() {
-        ConversionHistory history = new ConversionHistory();
-
         assertTrue(history.isEmpty());
         assertEquals(0, history.getConversions().size());
     }
 
     @Test
     void storesConversion() {
-        ConversionHistory history = new ConversionHistory();
-
-        Conversion conversion = new Conversion(
-                new BigDecimal("100"),
-                Currency.USD,
-                Currency.GHS,
-                new BigDecimal("11.8"),
-                new BigDecimal("1180")
-        );
+        Conversion conversion = createConversion();
 
         history.addConversion(conversion);
 
-        assertFalse(history.isEmpty());
         assertEquals(1, history.getConversions().size());
-        assertSame(conversion, history.getConversions().get(0));
+        assertFalse(history.isEmpty());
+        assertEquals(conversion, history.getConversions().get(0));
     }
 
     @Test
-    void canStoreMultipleConversions() {
-        ConversionHistory history = new ConversionHistory();
+    void returnsUnmodifiableConversionList() {
+        history.addConversion(createConversion());
 
-        Conversion first = new Conversion(
-                new BigDecimal("100"),
-                Currency.USD,
-                Currency.GHS,
-                new BigDecimal("11.8"),
-                new BigDecimal("1180")
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> history.getConversions().clear()
         );
-
-        Conversion second = new Conversion(
-                new BigDecimal("50"),
-                Currency.EUR,
-                Currency.USD,
-                new BigDecimal("1.1"),
-                new BigDecimal("55")
-        );
-
-        history.addConversion(first);
-        history.addConversion(second);
-
-        assertEquals(2, history.getConversions().size());
     }
 
     @Test
     void clearsHistory() {
-        ConversionHistory history = new ConversionHistory();
-
-        history.addConversion(new Conversion(
-                new BigDecimal("100"),
-                Currency.USD,
-                Currency.GHS,
-                new BigDecimal("11.8"),
-                new BigDecimal("1180")
-        ));
+        history.addConversion(createConversion());
 
         history.clear();
 
         assertTrue(history.isEmpty());
+        assertEquals(0, history.getConversions().size());
     }
 
     @Test
-    void returnedHistoryCannotBeModifiedDirectly() {
-        ConversionHistory history = new ConversionHistory();
+    void canStoreMultipleConversions() {
+        history.addConversion(createConversion());
+        history.addConversion(createConversion());
 
-        List<Conversion> conversions = history.getConversions();
+        assertEquals(2, history.getConversions().size());
+    }
 
-        assertThrows(
-                UnsupportedOperationException.class,
-                () -> conversions.add(new Conversion(
-                        BigDecimal.ONE,
-                        Currency.USD,
-                        Currency.GHS,
-                        new BigDecimal("11.8"),
-                        new BigDecimal("11.8")
-                ))
+
+@Test
+void persistsConversionsAcrossInstances() {
+    Conversion conversion = createConversion();
+    history.addConversion(conversion);
+
+    ConversionHistory reloadedHistory = new ConversionHistory(
+            tempDir.resolve("conversion-history.json")
+    );
+
+    assertEquals(1, reloadedHistory.getConversions().size());
+
+    Conversion restored = reloadedHistory.getConversions().get(0);
+    assertEquals(conversion.getAmount(), restored.getAmount());
+    assertEquals(conversion.getFrom().getCode(), restored.getFrom().getCode());
+    assertEquals(conversion.getTo().getCode(), restored.getTo().getCode());
+    assertEquals(conversion.getExchangeRate(), restored.getExchangeRate());
+    assertEquals(conversion.getResult(), restored.getResult());
+}
+
+@Test
+void preservesTimestampWhenReloadingHistory() {
+    Conversion conversion = createConversion();
+    history.addConversion(conversion);
+
+    ConversionHistory reloadedHistory = new ConversionHistory(
+            tempDir.resolve("conversion-history.json")
+    );
+
+    Conversion restored = reloadedHistory.getConversions().get(0);
+
+    assertEquals(
+            conversion.getTimestamp(),
+            restored.getTimestamp()
+    );
+}
+
+@Test
+void clearingHistoryRemovesSavedConversions() {
+    history.addConversion(createConversion());
+
+    history.clear();
+
+    ConversionHistory reloadedHistory = new ConversionHistory(
+            tempDir.resolve("conversion-history.json")
+    );
+
+    assertTrue(reloadedHistory.isEmpty());
+}
+
+    private Conversion createConversion() {
+        return new Conversion(
+                new BigDecimal("100"),
+                Currency.USD,
+                Currency.GHS,
+                new BigDecimal("11.7303"),
+                new BigDecimal("1173.03")
         );
     }
 }

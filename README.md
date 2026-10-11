@@ -1,35 +1,48 @@
 # Currency Converter
 
-A Java-based currency converter that retrieves exchange rates from the Frankfurter API and converts amounts between supported currencies. The project is being developed incrementally, with a focus on clean code, reliable calculations, automated testing, and a graphical user interface planned for a future milestone.
+A Java desktop application for converting amounts between currencies using reference exchange rates from the [Frankfurter API](https://frankfurter.dev/). Built with Java Swing, the application provides a graphical interface, dynamically loaded currencies, conversion history, and reliable decimal calculations using `BigDecimal`.
+
+The project emphasizes clean code, input validation, automated testing, persistent data, and practical Java application development.
 
 ## Features
 
-* Live reference exchange rates from the Frankfurter API
-* Currency conversion using `BigDecimal`
-* Support for USD, GHS, EUR, GBP, and NGN in the current version
-* Numbered currency selection
-* Input validation for currency choices and amounts
-* Exchange-rate caching for up to 24 hours
-* Conversion history with timestamps
-* API error handling and request timeouts
-* Automated unit tests using JUnit 5
-* Maven-based project structure
-
-> **Current status:** The console application is working. Dynamic currency discovery and a graphical user interface are planned improvements.
+* **Desktop GUI:** A graphical interface built with Java Swing.
+* **Live reference exchange rates:** Retrieves exchange rates from the Frankfurter API.
+* **Dynamic currency discovery:** Loads supported currencies from the API instead of relying solely on a hard-coded list.
+* **Accurate calculations:** Uses `BigDecimal` for monetary calculations.
+* **Currency selection:** Select source and target currencies from dropdown lists.
+* **Currency swapping:** Quickly reverse the selected source and target currencies.
+* **Input validation:** Handles invalid amounts and unsupported currency selections.
+* **Exchange-rate caching:** Caches successful exchange rates in memory for up to 24 hours.
+* **Conversion history:** Displays previous conversions, including timestamps.
+* **Persistent history:** Saves conversion history to a JSON file so records can be restored after restarting the application.
+* **History management:** Allows users to clear saved conversion history.
+* **Responsive interface:** Uses `SwingWorker` to perform network requests without blocking the GUI.
+* **Error handling:** Handles API errors, network failures, and request timeouts.
+* **Automated testing:** Includes unit tests for conversion logic and history management.
+* **Executable JAR:** Packages the application and its dependencies into a runnable JAR file using Maven Shade Plugin.
 
 ## Technologies
 
 * Java 21
+* Java Swing
 * Maven
 * Frankfurter Exchange Rates API
 * Jackson Databind
 * JUnit 5
+* HTTP Client
+* JSON-based persistence
+* Git and GitHub
 
 ## Requirements
 
-* JDK 21 or a compatible Java installation
-* Maven
-* Internet access for retrieving exchange rates
+To build the project from source, you need:
+
+* JDK 21 or a compatible Java development environment
+* Apache Maven
+* Internet access for retrieving exchange rates and currency data
+
+To run the packaged JAR, you need a compatible Java runtime unless you use a future self-contained application package.
 
 ## Getting Started
 
@@ -42,45 +55,67 @@ git clone https://github.com/YOUR_GITHUB_USERNAME/CurrencyConverter.git
 cd CurrencyConverter
 ```
 
-### 2. Build the project
+### 2. Build the application
+
+Run the following command from the project root:
 
 ```bash
 mvn clean package
 ```
 
+Maven compiles the application, runs the automated tests, and creates the packaged JAR.
+
 ### 3. Run the application
 
-Open the project in an IDE such as Visual Studio Code and run `Main.java` with Maven dependencies available on the runtime classpath.
+Launch the packaged application with:
+
+```bash
+java -jar target/CurrencyConverter-1.0-SNAPSHOT.jar
+```
+
+The graphical interface should open, and the application will attempt to load the supported currencies.
+
+Alternatively, open the project in an IDE such as Visual Studio Code and run `Main.java` with the required Maven dependencies available.
 
 ### 4. Run the tests
+
+Execute the test suite with:
 
 ```bash
 mvn clean test
 ```
 
-The current test suite covers currency calculations, invalid exchange rates, amount validation, and conversion history.
+The test suite covers currency-conversion calculations, validation, and conversion-history behavior.
 
 ## Supported Currencies
 
-The current implementation includes:
+The application retrieves its supported currency list dynamically from the Frankfurter API. The number of available currencies depends on the API response and the currencies supported by the service.
 
-| Code | Currency       |
-| ---- | -------------- |
-| USD  | US Dollar      |
-| GHS  | Ghanaian Cedi  |
-| EUR  | Euro           |
-| GBP  | British Pound  |
-| NGN  | Nigerian Naira |
+The application previously loaded 165 supported currencies successfully.
 
-The supported list is currently defined in the application's Java code. Expanding it through the API is planned.
+Currency availability may change, and not every currency is necessarily available for every exchange-rate request.
 
 ## Exchange Rate Information
 
-Exchange rates are retrieved from the [Frankfurter API](https://frankfurter.dev/).
+Exchange rates and currency information are retrieved from the [Frankfurter API](https://frankfurter.dev/).
 
-The application caches successful rates in memory for up to 24 hours. The cache is cleared when the application restarts.
+The application caches successful exchange rates in memory for up to 24 hours. This cache is cleared when the application restarts.
 
-These are reference exchange rates, not guaranteed bank, card, remittance, or cash-exchange transaction rates. Actual providers may apply different rates and fees.
+**Important:** These are reference exchange rates, not guaranteed bank, card, remittance, or cash-exchange transaction rates. Financial institutions and payment providers may apply different rates, fees, and spreads.
+
+The application requires an internet connection to retrieve fresh rates and currency data. If the API is unavailable, currency loading may use the application's fallback list, where applicable.
+
+## Conversion History and Data Persistence
+
+Conversion history is saved in `conversion-history.json`.
+
+The application stores conversion details, including the amount, source and target currencies, exchange rate, converted amount, and timestamp.
+
+History is loaded when the application starts, allowing previous conversions to remain available between sessions.
+
+The JSON file is stored relative to the application's working directory. Running the application from a different working directory may cause it to use a different history file.
+
+**Privacy note:** The history file is stored locally and is not intended to be a secure financial record or encrypted storage system.
 
 ## Project Structure
 
@@ -89,46 +124,68 @@ CurrencyConverter/
 ├── pom.xml
 ├── README.md
 ├── .gitignore
-└── src/
-    ├── main/
-    │   └── java/
-    │       └── com/
-    │           └── damilare/
-    │               └── currencyconverter/
-    │                   ├── Main.java
-    │                   ├── Currency.java
-    │                   ├── CurrencyConverter.java
-    │                   ├── ExchangeRateService.java
-    │                   ├── ExchangeRateResponse.java
-    │                   ├── Conversion.java
-    │                   ├── ConversionHistory.java
-    │                   └── InputHandler.java
-    └── test/
-        └── java/
-            └── com/
-                └── damilare/
-                    └── currencyconverter/
-                        ├── CurrencyConverterTest.java
-                        └── ConversionHistoryTest.java
+├── src/
+│   ├── main/
+│   │   └── java/
+│   │       └── com/
+│   │           └── damilare/
+│   │               └── currencyconverter/
+│   │                   ├── Main.java
+│   │                   ├── Currency.java
+│   │                   ├── CurrencyConverter.java
+│   │                   ├── ExchangeRateService.java
+│   │                   ├── ExchangeRateResponse.java
+│   │                   ├── Conversion.java
+│   │                   ├── ConversionHistory.java
+│   │                   ├── InputHandler.java
+│   │                   ├── CurrencyService.java
+│   │                   └── CurrencyConverterGUI.java
+│   └── test/
+│       └── java/
+│           └── com/
+│               └── damilare/
+│                   └── currencyconverter/
+│                       ├── CurrencyConverterTest.java
+│                       └── ConversionHistoryTest.java
+└── target/
+    └── CurrencyConverter-1.0-SNAPSHOT.jar
 ```
+
+The `target/` directory is generated during the Maven build and should generally not be committed to Git.
+
+## Testing Status
+
+The project has successfully passed the current automated test suite:
+
+* **13 tests executed**
+* **0 failures**
+* **0 errors**
+* **0 skipped**
+
+Manual verification has also confirmed that the packaged application launches, loads currencies, performs conversions, and preserves conversion history across restarts.
 
 ## Roadmap
 
-* [x] Build the console-based converter
+* [x] Build the currency-conversion logic
 * [x] Integrate live exchange rates
-* [x] Use `BigDecimal` for conversion calculations
-* [x] Add conversion history
+* [x] Use `BigDecimal` for calculations
 * [x] Add exchange-rate caching
+* [x] Add conversion history and timestamps
+* [x] Persist history using JSON
+* [x] Load supported currencies dynamically
+* [x] Build a desktop GUI using Java Swing
 * [x] Add automated unit tests
-* [ ] Load supported currencies dynamically from the API
-* [ ] Build a desktop GUI using Java Swing
-* [ ] Improve the GUI's conversion history and user experience
-* [ ] Complete final testing and packaging
+* [x] Package the application as an executable JAR
+* [ ] Add application screenshots to the README
+* [ ] Create a Windows installer or self-contained application package
+* [ ] Perform further usability and cross-environment testing
 
 ## Contributing
 
-This is a learning and portfolio project. Suggestions and constructive feedback are welcome.
+This is a learning and portfolio project. Suggestions, bug reports, and constructive feedback are welcome.
 
 ## Author
 
-Damilare David Adebesin (https://damilare-david-adebesin.onrender.com/)
+**Damilare David Adebesin**
+
+Portfolio: [damilare-david-adebesin.onrender.com](https://damilare-david-adebesin.onrender.com/)
